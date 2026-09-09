@@ -15,8 +15,6 @@ public class SceneManager {
 
     public static void AddScene(BaseScene addScene) {
         sceneMap.put(addScene.GetName(), addScene);
-        BaseScene scene = sceneMap.get(addScene.GetName());
-        scene.Init();
     }
 
     public static BaseScene GetCurrentScene() {
@@ -25,7 +23,10 @@ public class SceneManager {
 
     public static boolean ChangeScene(String name) {
         if (sceneMap.containsKey(name)) {
+            ObjectManager.ClearAllObject();
             currentScene = sceneMap.get(name);
+            currentScene.Init();
+            ObjectManager.InitAllObject();
             return true;
         }
         return false;

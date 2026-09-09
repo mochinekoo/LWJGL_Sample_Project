@@ -36,6 +36,7 @@ public class Main {
 
         GL.createCapabilities();
 
+        ObjectManager.Init();
         SceneManager.Init();
 
         mainShader = InitShader();
@@ -50,6 +51,7 @@ public class Main {
                 currentScene.Update();
                 currentScene.Draw();
             }
+            ObjectManager.UpdateObjectManager();
 
             GLFW.glfwSwapBuffers(windowHwnd);
 
