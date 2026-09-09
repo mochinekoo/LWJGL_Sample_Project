@@ -7,6 +7,8 @@ public class Main {
     public static final int DEFAULT_HEIGHT = 720;
     public static final String DEFAULT_TITLE = "Game";
 
+    public static int mainShader = 0;
+
     public static void main(String[] args) {
         if (!GLFW.glfwInit()) {
             throw new IllegalStateException("GLFWの初期化に失敗しました。");
@@ -34,56 +36,33 @@ public class Main {
 
         GL.createCapabilities();
 
-        int vertexArray = InitVertex();
-        int shader = InitShader();
+        SceneManager.Init();
+
+        mainShader = InitShader();
 
         while (!GLFW.glfwWindowShouldClose(windowHwnd)) {
             GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-            GL20.glUseProgram(shader);
-            GL30.glBindVertexArray(vertexArray);
-            GL11.glDrawElements(GL11.GL_TRIANGLES, 6, GL11.GL_UNSIGNED_INT, 0);
+            GL30.glUseProgram(mainShader);
+
+            BaseScene currentScene = SceneManager.GetCurrentScene();
+            if (currentScene != null) {
+                currentScene.Update();
+                currentScene.Draw();
+            }
+
             GLFW.glfwSwapBuffers(windowHwnd);
 
             GLFW.glfwPollEvents();
         }
 
-        GL30.glDeleteVertexArrays(vertexArray);
-        GL20.glDeleteProgram(shader);
+        GL20.glDeleteProgram(mainShader);
 
         GLFW.glfwDestroyWindow(windowHwnd);
         GLFW.glfwTerminate();
     }
 
-    public static int InitVertex() {
-        float[] vertices = {
-                -0.5f, 0.5f, 0.0f,
-                -0.5f, -0.5f, 0.0f,
-                0.5f, 0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f
-        };
 
-        int[] index = {
-                0, 1, 2,
-                2, 1, 3
-        };
-
-        int vertexArray = GL30.glGenVertexArrays();
-        GL30.glBindVertexArray(vertexArray);
-
-        int vertexBuffer = GL15.glGenBuffers();
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBuffer);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertices, GL15.GL_STATIC_DRAW);
-
-        int elementBuffer = GL15.glGenBuffers();
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, elementBuffer);
-        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, index, GL15.GL_STATIC_DRAW);
-
-        GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 3 * Float.BYTES, 0);
-        GL20.glEnableVertexAttribArray(0);
-
-        return vertexArray;
-    }
 
     public static int InitShader() {
 
