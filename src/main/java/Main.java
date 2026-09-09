@@ -1,6 +1,8 @@
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.*;
 
+import java.io.*;
+
 public class Main {
 
     public static final int DEFAULT_WIDTH = 1280;
@@ -64,29 +66,31 @@ public class Main {
         GLFW.glfwTerminate();
     }
 
+    public static String LoadShader(String fileName) {
+        File file = new File(fileName);
+        if (!file.exists()) {
+            return null;
+        }
+        if (!file.getName().contains(".glsl")) {
+            return null;
+        }
 
+        StringBuilder builder = new StringBuilder();
+        try (FileReader filereader = new FileReader(file);) {
+            int data;
+            while ((data = filereader.read()) != -1) {
+                builder.append((char) data);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return builder.toString();
+    }
 
     public static int InitShader() {
-
-        String vertexShaderSource = """
-                #version 330 core
-
-                layout (location = 0) in vec3 aPos;
-
-                void main() {
-                    gl_Position = vec4(aPos, 1.0);
-                }
-                """;
-
-        String fragmentShaderSource = """
-                #version 330 core
-
-                out vec4 FragColor;
-
-                void main() {
-                    FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-                }
-                """;
+        String vertexShaderSource = LoadShader(Main.class.getResource("VertexShader.glsl").getPath());
+        String fragmentShaderSource = LoadShader(Main.class.getResource("FragmentShader.glsl").getPath());
 
         int vertexShader = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
         GL20.glShaderSource(vertexShader, vertexShaderSource);
