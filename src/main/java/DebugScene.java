@@ -11,7 +11,7 @@ public class DebugScene extends BaseScene {
 
     @Override
     public void Init() {
-        ObjectManager.AddObject(new Box(1.0f, 0.0f, 0.0f, 1.0f));
+        ObjectManager.AddObject(new Box(200, 100,1.0f, 0.0f, 0.0f, 1.0f));
     }
 
     @Override
@@ -21,8 +21,6 @@ public class DebugScene extends BaseScene {
 
     @Override
     public void Draw() {
-        GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         GL30.glUseProgram(Main.mainShader);
     }
 

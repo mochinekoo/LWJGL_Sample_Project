@@ -43,6 +43,8 @@ public class Main {
 
         mainShader = InitShader();
 
+        GL11.glViewport(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
         while (!GLFW.glfwWindowShouldClose(windowHwnd)) {
             GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);

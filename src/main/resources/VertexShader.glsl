@@ -2,13 +2,12 @@
 
 layout (location = 0) in vec3 aPos;
 
-layout(std140) uniform UniformBuffer {
-    vec4 diffuse;
-};
+uniform mat4 wvpMatrix;
+uniform vec4 diffuse;
 
 out vec4 vertexColor;
 
 void main() {
-    gl_Position = vec4(aPos, 1.0);
+    gl_Position = wvpMatrix * vec4(aPos, 1.0);
     vertexColor = diffuse;
 }

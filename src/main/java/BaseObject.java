@@ -1,10 +1,12 @@
 public abstract class BaseObject {
 
     private String name = "";
-    private String tag = null;
+    protected String tag = null;
+    protected Transform transform;
 
     public BaseObject(String name) {
         this.name = name;
+        this.transform = new Transform();
     }
 
     public abstract void Init();
@@ -22,5 +24,13 @@ public abstract class BaseObject {
 
     public void SetTag(String tag) {
         this.tag = tag;
+    }
+
+    public Transform GetTransform() {
+        return transform;
+    }
+
+    public void SetTransform(Transform transform) {
+        this.transform = transform;
     }
 }
