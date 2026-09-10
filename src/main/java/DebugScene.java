@@ -11,7 +11,7 @@ public class DebugScene extends BaseScene {
 
     @Override
     public void Init() {
-        ObjectManager.AddObject(new Box());
+        ObjectManager.AddObject(new Box(1.0f, 0.0f, 0.0f, 1.0f));
     }
 
     @Override
