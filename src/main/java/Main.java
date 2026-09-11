@@ -88,6 +88,10 @@ public class Main {
                 GLFW.glfwMakeContextCurrent(windowHwnd);
             }
 
+            if (GLFW.glfwGetKey(windowHwnd, GLFW.GLFW_KEY_ESCAPE) == 1) {
+                GLFW.glfwSetWindowShouldClose(windowHwnd, true);
+            }
+
             GLFW.glfwSwapBuffers(windowHwnd);
 
             GLFW.glfwPollEvents();
