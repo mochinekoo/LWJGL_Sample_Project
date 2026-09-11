@@ -1,3 +1,8 @@
+import imgui.ImGui;
+import imgui.ImGuiIO;
+import imgui.flag.ImGuiConfigFlags;
+import imgui.gl3.ImGuiImplGl3;
+import imgui.glfw.ImGuiImplGlfw;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.*;
 
@@ -43,6 +48,15 @@ public class Main {
 
         mainShader = InitShader();
 
+        ImGui.createContext();
+        ImGuiIO io = ImGui.getIO();
+        io.addConfigFlags(ImGuiConfigFlags.DockingEnable);
+        io.addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
+        ImGuiImplGlfw imGuiGlfw = new ImGuiImplGlfw();
+        imGuiGlfw.init(windowHwnd, true);
+        ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
+        imGuiGl3.init("#version 330");
+
         GL11.glViewport(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
         while (!GLFW.glfwWindowShouldClose(windowHwnd)) {
@@ -50,12 +64,29 @@ public class Main {
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
             GL30.glUseProgram(mainShader);
 
+            imGuiGlfw.newFrame();
+            imGuiGl3.newFrame();
+            ImGui.newFrame();
+
             BaseScene currentScene = SceneManager.GetCurrentScene();
             if (currentScene != null) {
                 currentScene.Update();
                 currentScene.Draw();
             }
             ObjectManager.UpdateObjectManager();
+
+            ImGui.begin("aa");
+            ImGui.end();
+
+            ImGui.endFrame();
+            ImGui.render();
+            imGuiGl3.renderDrawData(ImGui.getDrawData());
+
+            if ((io.getConfigFlags() & ImGuiConfigFlags.ViewportsEnable) != 0) {
+                ImGui.updatePlatformWindows();
+                ImGui.renderPlatformWindowsDefault();
+                GLFW.glfwMakeContextCurrent(windowHwnd);
+            }
 
             GLFW.glfwSwapBuffers(windowHwnd);
 

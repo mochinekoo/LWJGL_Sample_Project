@@ -9,6 +9,12 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.spair</groupId>
+            <artifactId>imgui-java-app</artifactId>
+            <version>1.92.7.1</version>
+        </dependency>
+
         <!-- Source: https://mvnrepository.com/artifact/org.joml/joml -->
         <dependency>
             <groupId>org.joml</groupId>
